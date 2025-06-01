@@ -1,0 +1,11 @@
+ 
+# E:\RAG\.streamlit\config.toml
+
+[server]
+headless = true
+enableCORS = false
+port = 8501
+
+[browser]
+gatherUsageStats = false
+
