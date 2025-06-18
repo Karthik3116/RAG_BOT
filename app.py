@@ -1,5 +1,19 @@
 
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
+
+# ─── 1) Page config MUST be the first Streamlit call ───
+st.set_page_config(
+    page_title="Smart PDF Chat",
+    page_icon=":books:",
+    layout="wide",
+)
+
+# ─── 2) Then auto‑refresh to keep the app alive ───
+st_autorefresh(interval=200000, limit=None, key="keep_alive")
+
+
+
 from PyPDF2 import PdfReader
 import pandas as pd
 import base64
@@ -48,7 +62,7 @@ def get_conversational_chain(api_key):
 
 # ---------- Main UI App ----------
 def main():
-    st.set_page_config(page_title="Smart PDF Chat", page_icon=":books:", layout="wide")
+    # st.set_page_config(page_title="Smart PDF Chat", page_icon=":books:", layout="wide")
 
     st.markdown("""
         <style>
@@ -172,4 +186,7 @@ def main():
             st.markdown(f'<a href="data:file/csv;base64,{b64}" download="conversation_history.csv">📄 Download CSV</a>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
+    # st.set_page_config(page_title="Smart PDF Chat", page_icon=":books:", layout="wide")
+    # st_autorefresh(interval=2000, limit=None, key="keep_alive")
+
     main()
