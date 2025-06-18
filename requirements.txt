@@ -13,3 +13,4 @@ faiss-cpu
 wikipedia
 sentence-transformers
 transformers
+streamlit-autorefresh
