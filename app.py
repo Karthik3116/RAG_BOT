@@ -152,7 +152,7 @@ def main():
             with st.chat_message("assistant"):
                 st.markdown(bot_msg)
 
-    user_question = st.chat_input("💬 Ask something from the PDFs...")
+    user_question = st.chat_input("💬 Ask something from the PDFs Only...")
 
     if user_question:
         if not api_key:
