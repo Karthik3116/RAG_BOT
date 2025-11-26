@@ -1,2 +1,1 @@
-conda create --prefix E:\conda_envs\venv python=3.9 -y
-conda activate E:\conda_envs\venv
+conda create -n rag_bot python=3.10 -y
