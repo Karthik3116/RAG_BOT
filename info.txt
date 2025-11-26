@@ -1,0 +1,55 @@
+Here is the step-by-step technical breakdown of how a reference (Filename + Page Number) travels from the PDF to your screen:
+
+1. The "Birth" of the Reference (Metadata)
+When you first upload and process the PDF (inside process_and_embed_pdfs), the code creates a "Birth Certificate" for every single chunk of text.
+
+Look at this specific line in your code:
+
+Python
+
+docs.append(Document(
+    page_content=text, 
+    metadata={'source': original_name, 'page': page_num}  # <--- THIS IS THE REFERENCE
+))
+page_content: The actual text (e.g., "The revenue was $5M").
+
+metadata: A hidden tag attached to that text (e.g., {'source': 'report.pdf', 'page': 12}).
+
+2. The Storage
+When these documents are saved into the Vector Store (FAISS), this metadata is saved right alongside the text. It never gets separated.
+
+3. The Retrieval
+When you ask a question:
+
+The system finds the best chunks of text.
+
+It pulls the entire object out of the database, including that hidden metadata tag.
+
+The "Filter AI" (Gemini 2.0 Flash) decides which chunks are relevant, but it does not modify the metadata. It just passes the valid objects forward.
+
+4. The Display (The Right-Hand Column)
+In the UI section (with col2:), the code looks at the selected chunks and simply reads the tag:
+
+Python
+
+# Your code extracts the data explicitly:
+source = doc.metadata.get('source', 'Unknown')
+page = doc.metadata.get('page', 'N/A')
+
+# And prints it:
+st.markdown(f"**Source: `{source}` | Page {page}**")
+5. How the Yellow Highlighting Works
+This is the most "magical" looking part, but it is actually a standard text search. It happens in render_pdf_page_with_highlights:
+
+The code takes the text content of the chunk (texts_to_highlight).
+
+It opens the specific PDF page using fitz (PyMuPDF).
+
+It runs a search command: areas = page.search_for(clean_text).
+
+If it finds that exact sequence of words on the page, it draws a yellow rectangle (add_highlight_annot) over those coordinates.
+
+Summary
+Identification: Done via Python dictionaries (metadata), not by the AI.
+
+Highlighting: Done via exact text matching (search_for), not by computer vision.
